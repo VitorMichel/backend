@@ -1,3 +1,6 @@
+// Simulando um banco de dados simples
+let pagamentos = [];
+
 module.exports = {
   buscarPagamentos: (req, res) => {
     res.json(pagamentos);
@@ -16,7 +19,7 @@ module.exports = {
       descricao,
     };
 
-    //fazer post do pagamento
+    pagamentos.push(pagamento);
 
     res.status(201).json(pagamento);
   },
