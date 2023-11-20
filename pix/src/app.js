@@ -5,7 +5,7 @@ const pix = require('./pix_payment');
 (async () => {
   console.log("Initializing kafka...");
   const kafka = new Kafka({
-    clientId: 'kafka-nodejs-starter',
+    clientId: 'payments',
     brokers: ['localhost:9092'],
   });
 
@@ -28,12 +28,15 @@ const pix = require('./pix_payment');
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
 
-      const payment = message.value
+      const payment = message.value.toString()
+
 
       console.log(
         'Consumed a message = ',
         { topic, partition, value: message.value.toString() }
       )
+
+      pix.execute(JSON.parse(payment));
     },
   });
 
