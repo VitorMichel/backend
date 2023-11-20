@@ -4,10 +4,13 @@ const execute = (payment) => {
   console.log("Payment received: ", payment);
 
   payment.status = "confirmed";
+
   if (payment.value > 90 && payment.value < 100) {
     payment.status = "error";
     payment['error_description'] = errors[getRandomInt()];
   }
+
+  return payment
 }
 
 const errors = [

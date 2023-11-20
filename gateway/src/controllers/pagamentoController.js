@@ -39,8 +39,8 @@ module.exports = {
       id: id,
       end_to_end_id: generateId(),
       status: 'processing',
-      valor,
-      descricao,
+      value,
+      description,
       key
     };
 
