@@ -18,11 +18,11 @@ module.exports = {
   },
 
   realizarPagamento: async (req, res) => {
-    const { valor, descricao } = req.body;
+    const { value, description, key } = req.body;
 
-    // Valida se valor e descrição foram enviados
-    if (!valor || !descricao) {
-      return res.status(400).json({ mensagem: 'Valor e descrição são obrigatórios.' });
+    // Verifica se os campos foram preenchidos
+    if (!value || !description || !key) {
+      return res.status(400).json({ message: 'Campos obrigatórios não preenchidos.' });
     }
 
     let id = await redis.get("payment_id");
@@ -41,6 +41,7 @@ module.exports = {
       status: 'processing',
       valor,
       descricao,
+      key
     };
 
     // Salva pagamento no Redis
