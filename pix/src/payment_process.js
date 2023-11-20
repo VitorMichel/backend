@@ -1,14 +1,21 @@
 const kafka = require('./config');
 const broker = kafka.start();
-const producer = broker.producer({});
 const redis = require('../db/redis');
 
+const consumer = kafka.consumer({ groupId: 'payment-order-consumer' });
+const producer = broker.producer({});
+
 (async () => {
+  await consumer.connect();
   await producer.connect();
 })();
 
-const produce = async (topic, message) => {
+const consume = async (topic) => {
 
+}
+
+
+const produce = async (topic, message) => {
   const key = await redis.get(topic);
   let i = 0
   if (key) {
