@@ -1,5 +1,6 @@
 const express = require('express');
 const { Kafka } = require('kafkajs');
+const pix = require('./pix_payment');
 
 (async () => {
   console.log("Initializing kafka...");
@@ -27,6 +28,8 @@ const { Kafka } = require('kafkajs');
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
 
+      const payment = message.value
+
       console.log(
         'Consumed a message = ',
         { topic, partition, value: message.value.toString() }
@@ -36,7 +39,7 @@ const { Kafka } = require('kafkajs');
 
   // Send an event to the demoTopic topic
   await producer.send({
-    topic: 'demoTopic',
+    topic: 'payment-order-confirmed',
     messages: [
       { value: 'This event came from another service.' },
     ],
