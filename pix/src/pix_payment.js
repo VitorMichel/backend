@@ -1,8 +1,6 @@
 
 
 const execute = (payment) => {
-  console.log("Payment received: ", payment);
-
   payment.status = "confirmed";
 
   if (payment.value > 90 && payment.value < 100) {
@@ -10,7 +8,7 @@ const execute = (payment) => {
     payment['error_description'] = errors[getRandomInt()];
   }
 
-  return payment
+  return JSON.stringify(payment);
 }
 
 const errors = [
@@ -20,7 +18,7 @@ const errors = [
 ]
 
 const getRandomInt = () => {
-  return Math.floor(Math.random() * 3) + 1;
+  return Math.floor(Math.random() * 3);
 }
 
 module.exports = {
