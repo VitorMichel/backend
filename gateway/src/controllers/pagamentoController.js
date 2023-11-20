@@ -3,16 +3,18 @@ const redis = require('../db/redis');
 const topic = "payment-order";
 
 module.exports = {
-  buscarPagamentos: async (req, res) => {
-    // Conectar ao Kafka
-    await connectKafka();
+  buscarPagamentoPorId: async (req, res) => {
+    const { id } = req.params;
 
-    // Lógica para buscar pagamentos do Kafka
+    // Busca pagamento no Redis
+    const pagamento = await redis.get("pix::" + id);
 
-    // Desconectar do Kafka
-    await disconnectKafka();
+    // Verifica se pagamento foi encontrado
+    if (!pagamento) {
+      return res.status(404).json({ mensagem: 'Pagamento não encontrado.' });
+    }
 
-    res.json(pagamentos);
+    res.json(JSON.parse(pagamento));
   },
 
   realizarPagamento: async (req, res) => {
