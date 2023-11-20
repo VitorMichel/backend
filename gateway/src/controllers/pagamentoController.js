@@ -21,6 +21,8 @@ module.exports = {
     }
 
     // TODO salvar no db (redis)
+    const result2 = await client.get("key");
+    console.log(`result2: ${result2}`);
 
     // Envia pagamento para tópico do Kafka
     await produce();
