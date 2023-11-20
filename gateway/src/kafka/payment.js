@@ -1,41 +1,39 @@
 const kafka = require('./kafka');
 const broker = kafka.start();
 const producer = broker.producer({});
-const topic = "payment-order";
+const redis = require('../db/redis');
 
 (async () => {
-    await producer.connect();
+  await producer.connect();
 })();
 
-const produce = async () => {
+const produce = async (topic, message) => {
 
-    let i = 0
+  const key = await redis.get(topic);
 
-    // after the produce has connected, we start an interval timer
-    setInterval(async () => {
-        try {
-            // send a message to the configured topic with
-            // the key and value formed from the current value of `i`
-            await producer.send({
-                topic,
-                acks: 1,
-                messages: [
-                    {
-                        key: String(i),
-                        value: "this is message " + i,
-                    },
-                ],
-            })
+  let i = 0
+  if (key) {
+    i = parseInt(key);
+  } else {
+    await redis.set(topic, i);
+  }
 
-            // if the message is written successfully, log it and increment `i`
-            console.log("writes: ", i)
-            i++
-        } catch (err) {
-            console.error("could not write message " + err)
-        }
-    }, 1000)
+  try {
+    await producer.send({
+      topic,
+      acks: 1,
+      messages: [
+        {
+          key: String(i),
+          value: message,
+        },
+      ],
+    })
+  } catch (err) {
+    console.error("could not write message " + err)
+  }
 }
 
 module.exports = {
-    produce
+  produce
 }
