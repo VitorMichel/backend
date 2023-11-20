@@ -1,4 +1,4 @@
-const { producer, consumer, connectKafka, disconnectKafka } = require('../kafka');
+const { produce } = require('../kafka/payment');
 
 module.exports = {
   buscarPagamentos: async (req, res) => {
@@ -20,21 +20,16 @@ module.exports = {
       return res.status(400).json({ mensagem: 'Valor e descrição são obrigatórios.' });
     }
 
-    // Conectar ao Kafka
-    await connectKafka();
+    // TODO salvar no db (redis)
 
-    // Lógica para enviar pagamento ao Kafka
-
-    // Desconectar do Kafka
-    await disconnectKafka();
+    // Envia pagamento para tópico do Kafka
+    await produce();
 
     const pagamento = {
-      id: pagamentos.length + 1,
+      id: 1,
       valor,
       descricao,
     };
-
-    pagamentos.push(pagamento);
 
     res.status(201).json(pagamento);
   },
