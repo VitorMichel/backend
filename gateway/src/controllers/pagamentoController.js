@@ -23,9 +23,19 @@ module.exports = {
       return res.status(400).json({ mensagem: 'Valor e descrição são obrigatórios.' });
     }
 
+    let id = await redis.get("payment_id");
+
+    if (id) {
+      id = parseInt(id) + 1;
+    } else {
+      id = 1;
+    }
+    await redis.set("payment_id", id);
+
     // Cria objeto de pagamento
     const pagamento = {
-      id: generateId(),
+      id: id,
+      end_to_end_id: generateId(),
       status: 'processing',
       valor,
       descricao,
@@ -48,7 +58,7 @@ module.exports = {
 
 const generateId = () => {
   const prefix = "E";
-  const sequenceNumber = "0000000";
+  const sequenceNumber = "00000000";
   const dateTime = new Date().toISOString().replace(/[^0-9]/g, "").substring(0, 12);
   const randomString = Math.random().toString(36).substring(2, 15);
 

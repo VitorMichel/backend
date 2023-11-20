@@ -10,7 +10,6 @@ const redis = require('../db/redis');
 const produce = async (topic, message) => {
 
   const key = await redis.get(topic);
-
   let i = 0
   if (key) {
     i = parseInt(key);
