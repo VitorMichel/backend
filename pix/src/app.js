@@ -9,13 +9,9 @@ const pix = require('./pix_payment');
     brokers: ['localhost:9092'],
   });
 
-  const admin = kafka.admin()
-  await admin.connect()
-
   // Initialize the Kafka producer and consumer
   const producer = kafka.producer();
   const consumer = kafka.consumer({ groupId: 'payment-order-consumer' });
-
 
   await producer.connect();
   console.log("Connected to producer.");
