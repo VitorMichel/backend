@@ -27,7 +27,7 @@ const pix = require('./pix_payment');
     eachMessage: async ({ topic, partition, message }) => {
 
       const payment = message.value.toString()
-      const response = pix.execute(JSON.parse(payment));
+      const response = await pix.execute(JSON.parse(payment));
 
       await producer.send({
         topic: 'payment-order-confirmed',
