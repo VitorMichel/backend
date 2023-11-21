@@ -34,6 +34,8 @@ module.exports = {
     }
     await redis.set("payment_id", id);
 
+    const now = new Date();
+
     // Cria objeto de pagamento
     const pagamento = {
       id: id,
@@ -42,7 +44,8 @@ module.exports = {
       value,
       description,
       key,
-      created_at: new Date(),
+      created_at: now,
+      updated_at: now,
     };
 
     // Salva pagamento no Redis
