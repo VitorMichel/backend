@@ -45,10 +45,10 @@ module.exports = {
     };
 
     // Salva pagamento no Redis
-    const teste = await redis.set("pix::" + pagamento.id, JSON.stringify(pagamento));
+    const ok = await redis.set("pix::" + pagamento.id, JSON.stringify(pagamento));
 
     // Verifica se pagamento foi salvo
-    if (teste !== 'OK') {
+    if (ok !== 'OK') {
       return res.status(500).json({ mensagem: 'Erro ao salvar pagamento.' });
     }
 
