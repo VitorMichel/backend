@@ -41,7 +41,8 @@ module.exports = {
       status: 'processing',
       value,
       description,
-      key
+      key,
+      created_at: new Date(),
     };
 
     // Salva pagamento no Redis
